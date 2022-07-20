@@ -2,8 +2,12 @@
 from tkinter import Tk, END, Entry, N, E, S, W, Button
 from tkinter import font
 from tkinter import Label
+from tkinter import Menu
 from functools import partial
 
+from matplotlib import pyplot as plt
+import pylab as pl
+import numpy as np
 
 def get_input(entry, argu):
     entry.insert(END, argu)
@@ -39,12 +43,25 @@ def popupmsg():
     B1 = Button(popup, text="Okay", bg="#DDDDDD", command=popup.destroy)
     B1.pack()
 
-
+def graph():
+    x = np.arange(0, 4*np.pi, 0.1)
+    y = np.sin(x)
+    plt.plot(x, y)
+    plt.grid(True)
+    plt.show()
+    
 def cal():
     root = Tk()
-    root.title("Calc")
+    root.title("Calculator")
     root.resizable(0, 0)
-
+    menu = Menu(root)
+    root.config(menu = menu)
+    filemenu = Menu(menu)
+    menu.add_cascade(label = 'File',menu = filemenu)
+    filemenu.add_command(label = 'Setting')
+    #filemenu.add_separator()
+    #filemenu.add_command(label = 'Exit',command = root.quit)
+    
     entry_font = font.Font(size=15)
     entry = Entry(root, justify="right", font=entry_font)
     entry.grid(row=0, column=0, columnspan=4,
@@ -61,8 +78,8 @@ def cal():
     cal_button = partial(Button, root, fg=text_fg, bg=cal_button_bg,
                          padx=10, pady=3, activebackground=button_active_bg)
 
-    button7 = num_button(text='7', bg=num_button_bg,
-                         command=lambda: get_input(entry, '7'))
+#   button7 = num_button(text='7', bg=num_button_bg, command=lambda: get_input(entry, '7'))
+    button7 = num_button(text='7', command=lambda: get_input(entry, '7'))
     button7.grid(row=2, column=0, pady=5)
 
     button8 = num_button(text='8', command=lambda: get_input(entry, '8'))
@@ -126,8 +143,16 @@ def cal():
                       command=lambda: get_input(entry, '**'))
     button18.grid(row=5, column=2, pady=5)
     
+    #button19 = Button(root, text='log', fg=text_fg, bg=cal_button_bg, padx=10, pady=3, command=lambda: get_input(entry, 'log'))
+    #button19.grid(row=5, column=4, pady=5)
+    
+    button20 = Button(root, text='graph', command=graph,padx=10, pady=3)
+    button20.grid(row=4, column=4, pady=5)
+    
     root.mainloop()
+
 
 if __name__ == '__main__':
     cal()
+
 
